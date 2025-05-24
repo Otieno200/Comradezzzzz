@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post Product</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Post Your Product</h2>
+  <form id="postForm">
+    <label>Product Name:</label><br>
+    <input type="text" required><br><br>
+
+    <label>Product Image:</label><br>
+    <input type="file" accept="image/*" required><br><br>
+
+    <label>Price (KSH):</label><br>
+    <input type="number" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea rows="4" required></textarea><br><br>
+
+    <label>Condition:</label><br>
+    <select required>
+      <option value="">Select condition</option>
+      <option>New</option>
+      <option>Used</option>
+    </select><br><br>
+
+    <button type="submit">Post Product</button>
+  </form>
+</body>
+</html>

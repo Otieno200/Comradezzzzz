@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Seller Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    input, select {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+    button {
+      padding: 12px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body><h2>Seller Registration</h2>
+ <input type="text" id="name" placeholder="Full Name" />
+  <input type="text" id="studentId" placeholder="User ID" />
+  <input type="text" id="phone" placeholder="Phone Number" /> 
+  <input type="text" id="email" placeholder="user email" />
+<input type="text" id="password" placeholder="user password" />
+<select id="campus">
+      <option value="">Select campus</option>
+      <option value="Main campus">Main campus</option>
+      <option value="Chiromo campus">Chiromo campus</option>
+      <option value="Parklands campus">Parklands campus</option>
+      <option value="Kikuyu campus">Kikuyu campus</option>
+      <option value="Lower kabete campus">Lower kabete campus</option>
+      <option value="Upper kabete campus">Upper kabete campus</option>
+      <option value="Kenya science campus">Kenya science campus</option>
+      <option value="KNH campus">KNH campus</option>
+    </select>
+  <select id="product">
+      <option value="">Select product</option>
+      <option value="Clothes">Clothes</option>
+      <option value="Foodstuff">Foodstuff</option>
+      <option value="Jewelry">Jewelry</option>
+      <option value="Stationery">Stationery</option>
+      <option value="Shoes">Shoes</option>
+    </select>
+  <button onclick="registerBtn">Register</button>
+  ALREADY HAVE AN ACCOUNT?
+<button onclick="window.location.href='log in.html'">Log In</button>
+
+      <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+  <script>
+    // Your Firebase config here
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
+      authDomain: "comrade-bazaar.firebaseapp.com",
+      databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
+      projectId: "comrade-bazaar",
+      storageBucket: "comarde-bazaar.appspot.com",
+      messagingSenderId: "969365595474",
+      appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b"
+    };
+    <script>
+  document.getElementById("registerBtn").addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const user id = document.getElementById("studentId").value;
+    const phone = document.getElementById("phone").value;
+    const location = document.getElementById("location").value;const user email = document.getElementById("email").value;
+
+    firebase.database().ref("sellers/" + user id).set({
+      name: name,
+      user id: user id,
+      phone: phone,
+      location: location,
+      user email: user email 
+    })
+    .then(() => {
+      alert("Registration successful!");
+      window.location.href = "login.html"; // optional
+    })
+    .catch((error) => {
+      alert("Error: " + error.message);
+    });
+  });
+</script>

@@ -1,0 +1,53 @@
+
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Comrade Bazaar</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <input type="email" id="email" placeholder="Enter email"><br>
+  <input type="password" id="password" placeholder="Enter password"><br>
+  <a href="dashboard.html">
+  <button type="button">Log In</button>
+</a>
+  <p id="message"></p>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
+      authDomain: "comrade-bazaar.firebaseapp.com",
+      databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
+      projectId: "comrade-bazaar",
+      storageBucket: "comarde-bazaar.appspot.com",
+      messagingSenderId: "969365595474",
+      appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("message");
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          const uid = userCredential.user.uid;
+          return firebase.database().ref("users/" + uid).once("value");
+        })
+        .then(snapshot => {
+          const userData = snapshot.val();
+          msg.innerText = `Welcome userData.name, your product:{userData.product}`;
+        })
+        .catch(error => {
+          msg.innerText = error.message;
+        });
+    }
+  </script>
+</body>
+</html>

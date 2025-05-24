@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop Page</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #333;
+      color: white;
+    }
+
+    .menu-icon {
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 200px;
+      height: 100%;
+      background: #222;
+      color: white;
+      padding: 15px;
+      transition: 0.3s;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar h3 {
+      border-bottom: 1px solid #555;
+      padding-bottom: 5px;
+    }
+
+    .search-bar {
+      margin: 15px;
+      text-align: center;
+    }
+
+    .search-bar input {
+      width: 80%;
+      padding: 8px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      padding: 15px;
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      padding: 10px;text-align: center;
+    }
+
+    .product-card img {
+      max-width: 100%;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+  <div>Shop</div>
+</div><script>
+  let touchStartX = 0;
+
+  document.body.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  document.body.addEventListener('touchend', function(e) {
+    let touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 50) {
+      document.getElementById("sidebar").classList.remove("active");
+    }
+  });
+
+  function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("active");
+  }
+
+  function filterCategory(category) {
+    alert("Filter by " + category);// Replace alert with filtering logic later
+  }
+</script>
+
+<div class="sidebar" id="sidebar">
+  <h3>Categories</h3>
+  <button onclick="filterCategory('Clothing')">Clothing</button><br>
+  <button onclick="filterCategory('Electronics')">Electronics</button><br>
+  <button onclick="filterCategory('Books')">Books</button><br>
+  <button onclick="filterCategory('Furniture')">Furniture</button><br>
+  <button onclick="filterCategory('Jewelry')">Jewelry</button>
+</div>
+
+<div class="search-bar">
+  <input type="text" placeholder="Search products...">
+</div>
+
+<div class="products">
+  <div class="product-card">
+    <img src="product1.jpg" alt="Product">
+    <p>Product Name</p>
+    <p>KSH 1000</p>
+<P>name of the owner</p>
+<P>phone number</p>
+  </div>
+  <!-- Duplicate this div for more products -->
+</div>
+
+<script>
+  function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("active");
+  }
+</script>
+<footer>
+  <p>©comrade Oj fundi wa thermos - comrade must enjoy!</p>
+</footer>
+</body>
