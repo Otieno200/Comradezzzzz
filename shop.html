@@ -1,46 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shop</title>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js"></script>
+  <title>Comrade Bazaar - Shop</title>
   <style>
-    .product {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
     }
-    .product img {
-      max-width: 200px;
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .product-card img {
+      width: 100%;
       height: auto;
+      border-radius: 4px;
+    }
+    .product-info {
+      margin-top: 10px;
+    }
+    .product-info h3 {
+      margin: 0 0 10px 0;
+    }
+    .product-info p {
+      margin: 5px 0;
     }
   </style>
 </head>
 <body>
-  <h1>Available Products</h1>
-  <div id="productList"></div>
 
-  <script>
+  <h1>Comrade Bazaar - Shop</h1>
+  <div class="product-grid" id="productGrid"></div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">// Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
+
     // Your Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
       authDomain: "comrade-bazaar.firebaseapp.com",
       databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
       projectId: "comrade-bazaar",
-      storageBucket: "comrade-bazaar.firebasestorage.app",
+      storageBucket: "comrade-bazaar.appspot.com",
       messagingSenderId: "969365595474",
-      appId: "1:969365595474:web:2a24d3dbc079c45ca // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+      appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",
+      measurementId: "G-KTHM5XKHEX"
+    };
 
-    const productList = document.getElementById('productList');
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-    database.ref('products').on('value', function(snapshot) {
-      productList.innerHTML = '';
-      snapshot.forEach(function(childSnapshot) {
-        const product = childSnapshot.val();
+    // Reference to the 'products' node in the database
+    const productsRef = ref(database, 'products');
 
-        const productDiv = document.createElement('div');
-        productDiv.className = 'product';
+    // Get the container element
+    const productGrid = document.getElementById('productGrid');
 
-        const img = document.createElement('img');
+    // Listen for changes in the 'products' node
+    onValue(productsRef, (snapshot) => {
+      productGrid.innerHTML = ''; // Clear existing products
+      const data = snapshot.val();
+      if (data) {
+        // Iterate over each categoryObject.keys(data).forEach(category => {
+          const products = data[category];
+          // Iterate over each product in the category
+          Object.keys(products).forEach(productId => {
+            const product = products[productId];
+            // Create product card
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+              <img src="product.imageUrl" alt="Product Image">
+              <div class="product-info">
+                <h3>{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+                <p><strong>Price:</strong> Ksh product.price</p>
+                <p><strong>Condition:</strong>{product.condition}</p>
+                <p><strong>Location:</strong> product.location</p>
+                <p><strong>Contact:</strong>{product.phone}</p>
+              </div>
+            `;
+            productGrid.appendChild(card);
+          });
+        });
+      } else {
+        productGrid.innerHTML = '<p>No products available at the moment.</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>
