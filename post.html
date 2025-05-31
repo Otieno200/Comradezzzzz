@@ -1,33 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Post Product</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8./firebase-auth.js"></script>
 </head>
 <body>
-  <h2>Post Your Product</h2>
-  <form id="postForm">
-    <label>Product Name:</label><br>
-    <input type="text" required><br><br>
-
-    <label>Product Image:</label><br>
-    <input type="file" accept="image/*" required><br><br>
-
-    <label>Price (KSH):</label><br>
-    <input type="number" required><br><br>
-
-    <label>Description:</label><br>
-    <textarea rows="4" required></textarea><br><br>
-
-    <label>Condition:</label><br>
-    <select required>
-      <option value="">Select condition</option>
-      <option>New</option>
-      <option>Used</option>
+  <h1>Post a New Product</h1>
+  <form id="productForm">
+    <label for="category">Category:</label>
+    <select id="category" required>
+      <option value="">Select Category</option><option value="Foodstuff">Foodstuff</option>
+      <option value="Jewelry">Jewelry</option>
+      <option value="Stationeries">Stationeries</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Clothes">Clothes</option>
     </select><br><br>
 
-    <button type="submit">Post Product</button>
+    <label for="image">Product Image:</label>
+    <input type="file" id="image" accept="image/*" required><br><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" required><br><br>
+
+    <label for="condition">Condition:</label>
+    <input type="text" id="condition" required><br><br>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" required><br><br>
+
+    <label for="phone">Seller's Phone Number:</label>
+    <input type="tel" id="phone" required><br><br>
+
+    <button type="submit">Upload Product</button>
   </form>
+
+  <p id="notification"></p>
+
+  <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
+      authDomain: "comrade-bazaar.firebaseapp.com",
+      databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
+      projectId: "comrade-bazaar",
+      storageBucket: "comrade-bazaar.firebasestorage.app",
+      messagingSenderId: "969365595474",appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",
+      measurementId: "G-KTHM5XKHEX"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const storage = firebase.storage();
+
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const category = document.getElementById('category').value;
+      const imageFile = document.getElementById('image').files[0];
+      const price = document.getElementById('price').value;
+      const condition = document.getElementById('condition').value;
+      const location = document.getElementById('location').value;
+      const phone = document.getElementById('phone').value;
+
+      if (!category || !imageFile || !price || !condition || !location || !phone) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const storageRef = storage.ref('product_images/' + imageFile.name);
+      const uploadTask = storageRef.put(imageFile);
+
+      uploadTask.on('state_changed',
+        function(snapshot) {
+          // Progress function ...
+        },
+        function(error) {
+          console.error('Upload failed:', error);
+        },
+        function() {uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            const newProductRef = database.ref('products').push();
+            newProductRef.set({
+              category: category,
+              imageUrl: downloadURL,
+              price: price,
+              condition: condition,
+              location: location,
+              phone: phone,
+              timestamp: Date.now()
+            }, function(error) {
+              if (error) {
+                document.getElementById('notification').textContent = 'Error posting product.';
+              } else {
+                document.getElementById('notification').textContent = 'Product posted successfully!';
+                document.getElementById('productForm').reset();
+              }
+            });
+          });
+        }
+      );
+    });
+  </script>
 </body>
-</html>
+  </html>
+      
