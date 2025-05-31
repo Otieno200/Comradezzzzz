@@ -1,46 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login - Comrade Bazaar</title>
-</head>
-<body>
-  <h2>Login</h2>
-  <input type="email" id="email" placeholder="Enter email"><br>
-  <input type="password" id="password" placeholder="Enter password"><br>
-<button id="loginBtn">Log In</button>
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js"></script>
+  <title>Login | Comrade Bazaar</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js";
 
-  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
       authDomain: "comrade-bazaar.firebaseapp.com",
       databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
       projectId: "comrade-bazaar",
-      storageBucket: "comarde-bazaar.appspot.com",
+      storageBucket: "comrade-bazaar.firebasestorage.app",
       messagingSenderId: "969365595474",
-      appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b"
+      appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",
+      measurementId: "G-KTHM5XKHEX"
     };
-    firebase.initializeApp(firebaseConfig);
 
-    <script>
-  document.getElementById("loginBtn").addEventListener("click", function () {
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();window.loginUser = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Login success
-        alert("Login successful!");
-        window.location.href = "dashboard.html";
-      })
-      .catch((error) => {
-        // Login failed
-        alert("Login failed: " + error.message);
-      });
-  });
-</script>
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("Login failed: " + error.message);
+        });
+    };
+  </script>
+</head>
+<body>
+  <h2>Login to Comrade Bazaar</h2>
+  <input type="email" id="email" placeholder="Email" required><br><br>
+  <input type="password" id="password" placeholder="Password" required><br><br>
+  <button onclick="loginUser()">Log In</button>
 </body>
 </html>
