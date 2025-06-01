@@ -1,87 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Post Product - Comrade Bazaar</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-    }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    label, input, select, textarea {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-    }
-    #progressBar {
-      width: 100%;
-      background: #ddd;
-      height: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-    #progressFill {
-      height: 100%;
-      width: 0%;
-      background: #4caf50;
-      transition: width 0.3s;
-    }
-    button {
-      padding: 10px;
-      background: #0288d1;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
-</head><body>
-  <div class="container">
-    <h2>Post Your Product</h2>
+  <title>Post Item</title>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <h2>Post Your Item</h2>
 
-    <label>Category</label>
-    <select id="category">
-      <option value="foodstuff">Foodstuff</option>
-      <option value="jewelry">Jewelry</option>
-      <option value="stationery">Stationery</option>
-      <option value="electronics">Electronics</option>
-      <option value="clothes">Clothes</option>
-    </select>
+  <select id="category">
+    <option>Foodstuff</option>
+    <option>Jewelry</option>
+    <option>Stationeries</option>
+    <option>Electronics</option>
+    <option>Clothes</option>
+  </select><br><br>
 
-    <label>Product Image</label>
-    <input type="file" id="imageFile" accept="image/*">
+  <input type="file" id="image"><br><br>
+  <input type="text" id="price" placeholder="Price"><br><br>
+  <input type="text" id="condition" placeholder="Condition"><br><br>
+  <input type="text" id="location" placeholder="Location"><br><br>
+  <input type="text" id="phone" placeholder="Phone Number"><br><br>
+  <button onclick="uploadPost()">Upload</button>
 
-    <label>Price (Ksh)</label>
-    <input type="number" id="price" placeholder="Enter price">
+  <p id="status"></p>
 
-    <label>Condition</label>
-    <input type="text" id="condition" placeholder="e.g. New, Used">
-
-    <label>Location</label>
-    <input type="text" id="location" placeholder="Campus/Location">
-
-    <label>Phone Number</label>
-    <input type="text" id="phone" placeholder="07XXXXXXXX">
-
-    <div id="progressBar"><div id="progressFill"></div></div>
-
-    <button onclick="uploadProduct()">Submit Product</button>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";import { getDatabase, push, ref as dbRef, set } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
-
-    const firebaseConfig = {
+  <script>const firebaseConfig = {
       apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
       authDomain: "comrade-bazaar.firebaseapp.com",
       databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
@@ -92,50 +37,36 @@
       measurementId: "G-KTHM5XKHEX"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
-    const database = getDatabase(app);
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const auth = firebase.auth();
 
-    function uploadProduct() {
+    function uploadPost() {
       const category = document.getElementById('category').value;
-      const file = document.getElementById('imageFile').files[0];
       const price = document.getElementById('price').value;
       const condition = document.getElementById('condition').value;
       const location = document.getElementById('location').value;
       const phone = document.getElementById('phone').value;
 
-      if (!file) return alert("Please select an image!");
+      const user = auth.currentUser;
 
-      const storageRef = ref(storage, 'products/' + Date.now() + '_' + file.name);const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on('state_changed',
-        snapshot => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          document.getElementById('progressFill').style.width = progress + '%';
-        },
-        error => {
-          alert("Upload failed: " + error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(url => {
-            const productRef = push(dbRef(database, 'products/' + category));
-            set(productRef, {
-              imageUrl: url,
-              price,
-              condition,
-              location,
-              phone,
-              timestamp: Date.now()
-            }).then(() => {
-              alert("Product uploaded successfully!");
-              document.querySelector('form')?.reset();
-              document.getElementById('progressFill').style.width = '0%';
-            });
-          });
-        }
-      );
+      if (user) {
+        const postRef = db.ref('products/' + user.uid).push();
+        postRef.set({
+          category,
+          price,
+          condition,
+          location,
+          phone
+        }).then(() => {
+          document.getElementById('status').innerText = "Post uploaded!";
+        }).catch((error) => {document.getElementById('status').innerText = "Error: " + error.message;
+        });
+      } else {
+        alert("You must be logged in to post!");
+      }
     }
   </script>
 </body>
-      </html>
+  </html>
   
