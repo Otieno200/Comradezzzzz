@@ -9,6 +9,7 @@
 <body>
   <h2>Post Your Item</h2>
 
+  <input type="text" id="productName" placeholder="Product Name"><br><br>
   <select id="category">
     <option>Foodstuff</option>
     <option>Jewelry</option>
@@ -42,11 +43,14 @@
     const auth = firebase.auth();
 
     function uploadPost() {
+      const name = document.getElementById('productName').value;
       const category = document.getElementById('category').value;
       const price = document.getElementById('price').value;
       const condition = document.getElementById('condition').value;
       const location = document.getElementById('location').value;
       const phone = document.getElementById('phone').value;
+      const image = document.getElementById('image').files[0];
+      const status = document.getElementById('status');
 
       const user = auth.currentUser;
 
@@ -67,6 +71,13 @@
       }
     }
   </script>
+  <br><br>
+<button onclick="goToDashboard()">Exit to Dashboard</button>
+
+<script>
+  function goToDashboard() {
+    window.location.href = "dashboard.html";
+  }
+</script>
 </body>
-  </html>
-  
+    </html>
