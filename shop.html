@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Comrade Bazaar - Shop</title>
@@ -7,6 +8,13 @@
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    .controls input, .controls select, .controls button {
+      padding: 8px;
+      margin-right: 10px;
     }
     .product-grid {
       display: flex;
@@ -28,62 +36,106 @@
       object-fit: cover;
       border-radius: 4px;
     }
-    .product-card h3 {
-      margin: 10px 0 5px 0;
-    }
     .product-card p {
       margin: 5px 0;
       font-size: 14px;
     }
   </style>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
+
+  <!-- Firebase SDKs --><script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
   <h2>Shop</h2>
+
+  <!-- Search and Filter Controls -->
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search by product name">
+    <button onclick="applySearch()">Search</button>
+
+    <select id="categoryFilter">
+      <option value="all">All Categories</option>
+      <option value="Foodstuff">Foodstuff</option>
+      <option value="Jewelry">Jewelry</option>
+      <option value="Stationeries">Stationeries</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Clothes">Clothes</option>
+    </select>
+    <button onclick="applyCategoryFilter()">Filter</button>
+  </div>
+
   <div class="product-grid" id="productGrid"></div>
 
   <script>
     // Your Firebase configuration
-    const firebaseConfig = {apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
       authDomain: "comrade-bazaar.firebaseapp.com",
       databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
       projectId: "comrade-bazaar",
       storageBucket: "comrade-bazaar.appspot.com",
-      messagingSenderId: "969365595474",
-      appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",
+      messagingSenderId: "969365595474",appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",
       measurementId: "G-KTHM5XKHEX"
     };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     const productGrid = document.getElementById('productGrid');
+
+    let allProducts = [];
 
     // Fetch and display products
     db.ref('products').once('value').then(snapshot => {
       snapshot.forEach(userSnapshot => {
         userSnapshot.forEach(productSnapshot => {
           const product = productSnapshot.val();
-          const card = document.createElement('div');
-          card.className = 'product-card';
-          card.innerHTML = `
-            <img src="${product.image}" <p><strong>Name:</strong>${product.name}</p
-            
-            <p><strong>Category:</strong>${product.category}</p>
-            <p><strong>Condition:</strong> ${product.condition}</p>
-            <p><strong>Location:</strong>${product.location}</p>
-            <p><strong>Price:</strong> Ksh ${product.price}</p><p><strong>Dealer Phone No:</strong>${product.phone}</p>
-          `;
-          productGrid.appendChild(card);
+          allProducts.push(product);
         });
       });
+      displayProducts(allProducts);
     }).catch(error => {
       console.error("Error fetching products:", error);
     });
+
+    function displayProducts(products) {
+      productGrid.innerHTML = '';
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${product.image}" <p><strong>Name:</strong>${product.name}</p
+            
+            <p><strong>Category:</strong>${product.category}</p>
+            <p><strong>Description and condition:</strong> ${product.condition}</p>
+            <p><strong>Location:</strong>${product.location}</p>
+            <p><strong>Price:</strong> Ksh ${product.price}</p><p><strong>Dealer Phone No:</strong>${product.phone}</p>
+          <button onclick="viewImage('${product.image}')">View Image</button>
+        `;
+        productGrid.appendChild(card);
+      });
+    }
+
+    function applySearch() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const filteredProducts = allProducts.filter(product =>
+        product.name && product.name.toLowerCase().includes(searchTerm)
+      );
+      displayProducts(filteredProducts);
+    }
+
+    function applyCategoryFilter() {
+      const selectedCategory = document.getElementById('categoryFilter').value;
+      const filteredProducts = selectedCategory === 'all'
+        ? allProducts
+        : allProducts.filter(product => product.category === selectedCategory);
+      displayProducts(filteredProducts);
+    }
+
+    function viewImage(imageUrl) {
+      localStorage.setItem('selectedImage', imageUrl);
+      window.location.href = 'view.html';
+    }
   </script>
 </body>
 </html>
-
