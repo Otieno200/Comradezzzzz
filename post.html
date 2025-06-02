@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Post Item</title>
+  <title>Post Your Product</title>
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
-  <h2>Post Your Item</h2>
-
+  <h2>Post Your Product</h2><!-- Product Details Form -->
   <input type="text" id="productName" placeholder="Product Name"><br><br>
   <select id="category">
-    <option>Foodstuff</option>
-    <option>Jewelry</option>
-    <option>Stationeries</option>
-    <option>Electronics</option>
-    <option>Clothes</option>
+    <option value="Foodstuff">Foodstuff</option>
+    <option value="Jewelry">Jewelry</option>
+    <option value="Stationeries">Stationeries</option>
+    <option value="Electronics">Electronics</option>
+    <option value="Clothes">Clothes</option>
   </select><br><br>
-
-  <input type="file" id="image"><br><br>
-  <input type="text" id="price" placeholder="Price"><br><br>
-  <input type="text" id="condition" placeholder="Condition"><br><br>
-  <input type="text" id="location" placeholder="Location"><br><br>
+  <input type="file" id="image"><br><br>Note:Image uploaded must not exceed 1mb<input type="text" id="price" placeholder="Price"><br><br>
+  <input type="text" id="condition" placeholder="Description and condition"><br><br>
+    <select id="location">
+    <option value="Main campus">Main campus</option>
+    <option value="Parklands">Parklands</option>
+    <option value="Kikuyu campus">Kikuyu campus</option>
+    <option value="Lower Kabete">Lower kabete</option>
+    <option value="Kenya science campus">Kenya science campus</option> <option value="Chiromo campus">Chiromo campus</option> <option value="KNH campus">KNH campus</option> <option value="ADD campus">ADD campus</option>
+  </select><br><br>
   <input type="text" id="phone" placeholder="Phone Number"><br><br>
   <button onclick="uploadPost()">Upload</button>
 
   <p id="status"></p>
 
-  <script>const firebaseConfig = {
+  <!-- Firebase Configuration and Script -->
+  <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
       apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
       authDomain: "comrade-bazaar.firebaseapp.com",
       databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
@@ -35,13 +42,23 @@
       storageBucket: "comrade-bazaar.appspot.com",
       messagingSenderId: "969365595474",
       appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",
-      measurementId: "G-KTHM5XKHEX"
-    };
+      measurementId: "G-KTHM5XKHEX"};
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
 
+    // Monitor authentication state
+    auth.onAuthStateChanged(function(user) {
+      if (!user) {
+        alert("You must be logged in to post a product.");
+        // Redirect to login page or handle accordingly
+        window.location.href = "login.html"; // Replace with your login page
+      }
+    });
+
+    // Function to upload product
     function uploadPost() {
       const name = document.getElementById('productName').value;
       const category = document.getElementById('category').value;
@@ -49,35 +66,56 @@
       const condition = document.getElementById('condition').value;
       const location = document.getElementById('location').value;
       const phone = document.getElementById('phone').value;
-      const image = document.getElementById('image').files[0];
+      const imageFile = document.getElementById('image').files[0];
       const status = document.getElementById('status');
 
-      const user = auth.currentUser;
-
-      if (user) {
-        const postRef = db.ref('products/' + user.uid).push();
-        postRef.set({
-          category,
-          price,
-          condition,
-          location,
-          phone
-        }).then(() => {
-          document.getElementById('status').innerText = "Post uploaded!";
-        }).catch((error) => {document.getElementById('status').innerText = "Error: " + error.message;
-        });
-      } else {
-        alert("You must be logged in to post!");
+      // Validate input fields
+      if (!name || !category || !price || !condition || !location || !phone || !imageFile) {
+        alert("Please fill in all fields and select an image.");
+        return;
       }
+
+      const reader = new FileReader();reader.onloadend = function () {
+        const base64Image = reader.result;
+
+        const user = auth.currentUser;
+        if (user) {
+          const postRef = db.ref('products/' + user.uid).push();
+          postRef.set({
+            name,
+            category,
+            price,
+            condition,
+            location,
+            phone,
+            image: base64Image
+          }).then(() => {
+            status.innerText = "Product uploaded successfully!";
+            // Optionally, reset the form fields
+            document.getElementById('productName').value = "";
+            document.getElementById('category').selectedIndex = 0;
+            document.getElementById('image').value = "";
+            document.getElementById('price').value = "";
+            document.getElementById('condition').value = "";
+            document.getElementById('location').value = "";
+            document.getElementById('phone').value = "";
+          }).catch((error) => {
+            status.innerText = "Error: " + error.message;
+          });
+        } else {
+          alert("You must be logged in to post!");
+        }
+      };
+
+      reader.readAsDataURL(imageFile);
     }
   </script>
-  <br><br>
-<button onclick="goToDashboard()">Exit to Dashboard</button>
 
-<script>
-  function goToDashboard() {
-    window.location.href = "dashboard.html";
-  }
-</script>
+  <br><br>
+  <button onclick="goToDashboard()">Exit to Dashboard</button>
+  <script>function goToDashboard() {
+      window.location.href = "dashboard.html"; // Replace with your dashboard page
+    }
+  </script>
 </body>
-    </html>
+                                                                 </html>
