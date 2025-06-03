@@ -7,9 +7,17 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding-top: 50px;
-      background-color: #f4f4f4;
+      background-color: #C7C8BC;
     }
-
+body {
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+  }
     h2 {
       color: #333;
     }
@@ -18,7 +26,7 @@
       display: inline-block;
       margin: 20px;
       padding: 15px 30px;
-      background-color: #007bff;
+      background-color: rgba(0, 123, 255, 1);
       color: white;
       border: none;
       border-radius: 6px;
@@ -28,7 +36,7 @@
     }
 
     .btn:hover {
-      background-color: #0056b3;
+      background-color: #DA0B19;
     }
 
     footer {
@@ -42,7 +50,13 @@
   <h2>Welcome to Comrade Bazaar Dashboard!</h2>
   <p>Choose your next step:</p>
   <a href="post.html" class="btn">Post Product</a>
-  <a href="shop.html" class="btn">Shop</a>
+  <a href="shop.html" class="btn">Shop</a><button onclick="goToUserProfile()">My Profile</button>
+
+<script>
+  function goToUserProfile() {
+    window.location.href = "user profile.html";
+  }
+</script>
 
   <footer>
     ©Comrade Oj Fundi wa Thermos – Comrade Must Enjoy!
