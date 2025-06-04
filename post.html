@@ -15,7 +15,7 @@
   border-radius: 8px;
   outline: none;
   background-color: #f9f9f9;
-  font-size: 16px;
+  font-size: 30px;
   width: 90%;
   max-width: 400px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
@@ -34,7 +34,7 @@ input:focus, select:focus, textarea:focus {
     background: linear-gradient(135deg, #00b09b, #96c93d);
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 30px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transition: background 0.3s, transform 0.2s;
@@ -46,7 +46,7 @@ input:focus, select:focus, textarea:focus {
   }h1, h2 {
   text-align: center;
   color: #09EE32;
-  margin-top: 30px;
+  margin-top: 10px;
 </style>
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
@@ -54,7 +54,9 @@ input:focus, select:focus, textarea:focus {
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
-  <h2>Post Your Product</h2><!-- Product Details Form -->
+  <h2 style="font-size: 50px; font-weight: bold; color: #00c853; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+ POST YOUR PRODUCT 
+</h2><!-- Product Details Form -->
   <input type="text" id="productName" placeholder="Product Name"><br><br>
   <select id="category">
     <option value="Foodstuff">Foodstuff</option>
@@ -63,7 +65,7 @@ input:focus, select:focus, textarea:focus {
     <option value="Electronics">Electronics</option>
     <option value="Clothes">Clothes</option>
   </select><br><br>
-  <input type="file" id="image"><br><br>Note:Image uploaded must not exceed 1mb<input type="text" id="price" placeholder="Price"><br><br>
+  <input type="file" id="image"><br><br<input type="text" id="price" placeholder="Price"><br><br>
   <input type="text" id="condition" placeholder="Description and condition"><br><br>
     <select id="location">
     <option value="Main campus">Main campus</option>
@@ -72,7 +74,7 @@ input:focus, select:focus, textarea:focus {
     <option value="Lower Kabete">Lower kabete</option>
     <option value="Kenya science campus">Kenya science campus</option> <option value="Chiromo campus">Chiromo campus</option> <option value="KNH campus">KNH campus</option> <option value="ADD campus">ADD campus</option>
   </select><br><br>
-  <input type="text" id="phone" placeholder="Enter your WhatsApp Number">NOTE: Whatsapp only<br><br>
+  <input type="text" id="phone" placeholder="Enter your WhatsApp Number"><br><br>
   <button onclick="uploadPost()">Upload</button>
 
   <p id="status"></p>
@@ -164,4 +166,4 @@ input:focus, select:focus, textarea:focus {
     }
   </script>
 </body>
-  </html>
+                                                                         </html>
