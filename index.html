@@ -10,29 +10,86 @@
       padding-top: 100px;
     }
     h1 {
-      font-size: 19px;
-      color: #D51717;
+      font-size: 30px;
+      color: #46CC12;
     }
-    button {
-      padding: 12px 24px;
-      font-size: 18px;
-      margin-top: 30px;
-      background-color: #4CAF30;
-      color: white;
-      border: lightgoldenrodyellow;
-      cursor: pointer;
-    }
+   button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  button:hover {
+    background: red;
+    transform: scale(1.05);
+  }
   </style>
 </head>
 <body>
   <h1>THE COMRADE BAZAAR
   <div class="logo-container">
   <img src="logo.png" alt="Comrade Bazaar Logo" class="logo">
+</div><div id="statsBox" style="
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background:  #27E80D;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  margin: 20px auto;
+">
+  <p style="margin: 5px 0;">Users: <span id="userCount">10k+</span></p>
+  <p style="margin: 5px 0;">Products: <span id="productCount">0</span></p>
 </div>
-✊WELCOME TO THE COMRADE MARKET!✊</h1>
+</h1>
   <button onclick="location.href='register.html'">PROCEED</button>
   <footer>
-  <p>©comrade Oj fundi wa thermos - comrade must enjoy!</p>
-</footer>
+  <p>©2025comrade Oj - comrade must enjoy!</p>
+</footer><script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAWRiXi41JFAxT8CaJEmnhfThRNVuJ7rSo",
+    authDomain: "comrade-bazaar.firebaseapp.com",
+    databaseURL: "https://comrade-bazaar-default-rtdb.firebaseio.com",
+    projectId: "comrade-bazaar",
+    storageBucket: "comrade-bazaar.appspot.com",
+    messagingSenderId: "969365595474",
+    appId: "1:969365595474:web:2a24d3dbc079c45ca2c68b",measurementId: "G-KTHM5XKHEX"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // Count users
+  db.ref('user').once('value', snapshot => {
+   let total = 0;
+    snapshot.forEach(user => {
+      total += user.numChildren();
+    });
+    document.getElementById('productCount').textContent = total;
+  });
+
+  // Count products
+  db.ref('products').once('value', snapshot => {
+    let total = 0;
+    snapshot.forEach(user => {
+      total += user.numChildren();
+    });
+    document.getElementById('productCount').textContent = total;
+  });
+</script>
 </body>
-  </html>
+</html>
