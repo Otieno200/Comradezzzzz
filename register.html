@@ -7,7 +7,7 @@
   border-radius: 8px;
   outline: none;
   background-color: #f9f9f9;
-  font-size: 16px;
+  font-size: 50px;
   width: 90%;
   max-width: 400px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
@@ -34,7 +34,7 @@ input:focus, select:focus, textarea:focus {
     background: linear-gradient(135deg, #00b09b, #96c93d);
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 50px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transition: background 0.3s, transform 0.2s;
@@ -47,7 +47,35 @@ input:focus, select:focus, textarea:focus {
   text-align: center;
   color: #09EE32;
   margin-top: 30px;
-}
+  font-size: 50px
+}label {
+    font-size: 50px;
+    font-weight: bold;
+    color: red;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    font-size: 16px;
+    padding: 12px;
+    border: 2px solid #2ecc71;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    background-color: #fff;
+  }
+
+  .bottom-text {
+    font-size: 50px;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+    font-family: 'Segoe UI', sans-serif;
+  }
 </style>
   <script type="module">
     // Import Firebase SDK
@@ -99,8 +127,7 @@ input:focus, select:focus, textarea:focus {
   <input type="email" id="email"><br><br>
   <label>Password:</label><br>
   <input type="password" id="password"><br><br>
-  <button onclick="registerUser()">Register</button> 
-  Already have an account?
+  <button onclick="registerUser()">Register</button> <div class="bottom-text">Already have an account?</div>
   <button onclick="location.href='log in.html'">PROCEED</button>
 </body>
 </html>
