@@ -5,14 +5,38 @@
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-auth-compat.js"></script>
- <style>
+ <style>body {
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+  }button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  button:hover {
+    background: red;
+    transform: scale(1.05);
+  }
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f6f9;
       padding: 20px;
     }
     h2, h3 {
-      color: #2c3e50;
+      color: #44EA15;
     }
     #userInfo {
       margin-bottom: 30px;
@@ -97,5 +121,22 @@
       window.location.href = "dashboard.html";
     }
   </script>
+
+<!-- + Button to Post Item -->
+<button onclick="window.location.href='post.html'" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background-color: #28a745;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: background-color 0.3s;
+" title="Add New Post">+</button>
 </body>  <button onclick="goBack()">Back to dashboard</button>
 </html>
